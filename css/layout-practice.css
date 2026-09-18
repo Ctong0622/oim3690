@@ -1,0 +1,72 @@
+/* Layout practice: Flexbox navbar + CSS Grid cards */
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: rgb(240, 244, 255);
+    color: rgb(45, 45, 45);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Flexbox navigation bar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(109, 40, 217);
+    padding: 15px 30px;
+}
+
+.logo {
+    color: rgb(255, 255, 255);
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* CSS Grid card layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 30px;
+}
+
+.card {
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card h3 {
+    color: rgb(109, 40, 217);
+    margin-top: 0;
+}
+
+/* AI-added footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background: rgb(75, 63, 114);
+    color: rgb(255, 255, 255);
+}
+
