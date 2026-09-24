@@ -8,14 +8,19 @@
 </head>
 <body>
     <header>
-        <h1>Charles Tong</h1>
-        <nav>
-            <ul>
+        <nav class="site-nav">
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul id="navLinks">
                 <li><a href="#interests">Interests</a></li>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about-me.html">About Me</a></li>
             </ul>
         </nav>
+        <h1>Charles Tong</h1>
     </header>
 
     <main>
@@ -43,5 +48,7 @@
         </address>
         <p><small>Last updated <time datetime="2026-09-10">September 10, 2026</time>.</small></p>
     </footer>
+
+    <script src="js/nav.js" defer></script>
 </body>
 </html>
