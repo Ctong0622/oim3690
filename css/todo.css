@@ -1,66 +1,79 @@
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f4f4;
-}
+/* Page-specific styling for the To-Do List, built on top of styles.css */
 
-main {
-    max-width: 400px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
+.todo-card {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 12px;
+    padding: 25px 30px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 #todoForm {
+    margin-bottom: 10px;
+}
+
+.todo-input-row {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: 10px;
 }
 
 #todoInput {
     flex: 1;
-    padding: 0.5rem;
+    padding: 10px 14px;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 2px solid rgb(216, 200, 245);
+    border-radius: 8px;
+    background: white;
+}
+
+#todoInput:focus {
+    outline: none;
+    border-color: rgb(109, 40, 217);
 }
 
 #todoForm button {
-    padding: 0.5rem 1rem;
+    padding: 10px 18px;
     font-size: 1rem;
-    background-color: #0066cc;
+    background: rgb(109, 40, 217);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 #todoForm button:hover {
-    background-color: #004c99;
+    background: rgb(87, 30, 173);
 }
 
 #todoList {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 15px 0 0;
+    background: none;
 }
 
 #todoList li {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem;
-    border-bottom: 1px solid #eee;
+    gap: 12px;
+    padding: 12px 10px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid rgb(167, 139, 250);
+    animation: fadeIn 0.2s ease;
 }
 
-#todoList li.completed span {
-    text-decoration: line-through;
-    color: #999;
+#todoList li.completed {
+    border-left-color: rgb(167, 220, 180);
+    opacity: 0.7;
+}
+
+#todoList li .task-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: rgb(109, 40, 217);
+    cursor: pointer;
 }
 
 #todoList li .task-text {
@@ -68,14 +81,65 @@ h1 {
     cursor: pointer;
 }
 
-#todoList li button {
+#todoList li.completed .task-text {
+    text-decoration: line-through;
+    color: rgb(150, 150, 150);
+}
+
+#todoList li .delete-btn {
     background: none;
     border: none;
-    color: #cc0000;
-    font-size: 1rem;
+    color: rgb(190, 50, 50);
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+#todoList li .delete-btn:hover {
+    background: rgba(190, 50, 50, 0.1);
+}
+
+.empty-message {
+    text-align: center;
+    color: rgb(130, 120, 150);
+    font-style: italic;
+    margin: 20px 0;
+}
+
+.todo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid rgb(225, 215, 245);
+    font-size: 0.9rem;
+    color: rgb(90, 75, 120);
+}
+
+.todo-footer button {
+    background: none;
+    border: none;
+    color: rgb(109, 40, 217);
+    font-weight: bold;
     cursor: pointer;
 }
 
-#todoList li button:hover {
-    color: #990000;
+.todo-footer button:hover {
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

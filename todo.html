@@ -3,23 +3,57 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do List</title>
+    <title>To-Do List | Ctong0622</title>
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/todo.css" />
 </head>
 
 <body>
-    <main>
+    <header>
+        <nav class="site-nav">
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="hello.html">Hello</a></li>
+                <li><a href="about-me.html">About Me</a></li>
+                <li><a href="todo.html">To-Do List</a></li>
+                <li><a href="https://github.com/Ctong0622" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </nav>
         <h1>To-Do List</h1>
+    </header>
 
-        <form id="todoForm">
-            <label for="todoInput">New task:</label>
-            <input type="text" id="todoInput" name="todoInput" placeholder="Add a task..." required />
-            <button type="submit">Add</button>
-        </form>
+    <main>
+        <div class="todo-card">
+            <form id="todoForm">
+                <label for="todoInput">New task:</label>
+                <div class="todo-input-row">
+                    <input type="text" id="todoInput" name="todoInput" placeholder="Add a task..." required />
+                    <button type="submit">Add</button>
+                </div>
+            </form>
 
-        <ul id="todoList"></ul>
+            <ul id="todoList"></ul>
+            <p id="emptyMessage" class="empty-message">No tasks yet. Add one above to get started!</p>
+
+            <div class="todo-footer">
+                <span id="taskCount">0 tasks remaining</span>
+                <button type="button" id="clearCompleted">Clear Completed</button>
+            </div>
+        </div>
     </main>
 
+    <footer>
+        <address>
+            Reach me on <a href="https://github.com/Ctong0622">GitHub</a>.
+        </address>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
     <script src="js/todo.js" defer></script>
 </body>
 </html>

@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('todoForm');
     const input = document.getElementById('todoInput');
     const list = document.getElementById('todoList');
+    const emptyMessage = document.getElementById('emptyMessage');
+    const taskCount = document.getElementById('taskCount');
+    const clearCompletedButton = document.getElementById('clearCompleted');
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -15,25 +18,52 @@ document.addEventListener('DOMContentLoaded', () => {
         input.focus();
     });
 
+    clearCompletedButton.addEventListener('click', () => {
+        list.querySelectorAll('li.completed').forEach((item) => item.remove());
+        updateStatus();
+    });
+
     function addTask(text) {
         const item = document.createElement('li');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'task-checkbox';
+        checkbox.addEventListener('change', () => {
+            item.classList.toggle('completed', checkbox.checked);
+            updateStatus();
+        });
 
         const span = document.createElement('span');
         span.className = 'task-text';
         span.textContent = text;
         span.addEventListener('click', () => {
-            item.classList.toggle('completed');
+            checkbox.checked = !checkbox.checked;
+            item.classList.toggle('completed', checkbox.checked);
+            updateStatus();
         });
 
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
+        deleteButton.className = 'delete-btn';
         deleteButton.textContent = 'Delete';
         deleteButton.addEventListener('click', () => {
             item.remove();
+            updateStatus();
         });
 
+        item.appendChild(checkbox);
         item.appendChild(span);
         item.appendChild(deleteButton);
         list.appendChild(item);
+        updateStatus();
+    }
+
+    function updateStatus() {
+        const items = list.querySelectorAll('li');
+        const remaining = list.querySelectorAll('li:not(.completed)').length;
+
+        emptyMessage.style.display = items.length === 0 ? 'block' : 'none';
+        taskCount.textContent = `${remaining} task${remaining === 1 ? '' : 's'} remaining`;
     }
 });
