@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('todoForm');
     const input = document.getElementById('todoInput');
+    const dueDateInput = document.getElementById('todoDueDate');
     const list = document.getElementById('todoList');
     const emptyMessage = document.getElementById('emptyMessage');
     const taskCount = document.getElementById('taskCount');
@@ -13,8 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const taskText = input.value.trim();
         if (!taskText) return;
 
-        addTask(taskText);
+        addTask(taskText, dueDateInput.value);
         input.value = '';
+        dueDateInput.value = '';
         input.focus();
     });
 
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateStatus();
     });
 
-    function addTask(text) {
+    function addTask(text, dueDate) {
         const item = document.createElement('li');
 
         const checkbox = document.createElement('input');
@@ -54,6 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         item.appendChild(checkbox);
         item.appendChild(span);
+
+        if (dueDate) {
+            const dueDateSpan = document.createElement('span');
+            dueDateSpan.className = 'task-due-date';
+            dueDateSpan.textContent = `Due: ${dueDate}`;
+            item.appendChild(dueDateSpan);
+        }
+
         item.appendChild(deleteButton);
         list.appendChild(item);
         updateStatus();

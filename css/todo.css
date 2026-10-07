@@ -13,7 +13,27 @@
 
 .todo-input-row {
     display: flex;
+    align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
+}
+
+.due-date-label {
+    font-size: 0.9rem;
+    color: rgb(90, 75, 120);
+}
+
+#todoDueDate {
+    padding: 9px 10px;
+    font-size: 0.95rem;
+    border: 2px solid rgb(216, 200, 245);
+    border-radius: 8px;
+    background: white;
+}
+
+#todoDueDate:focus {
+    outline: none;
+    border-color: rgb(109, 40, 217);
 }
 
 #todoInput {
@@ -84,6 +104,12 @@
 #todoList li.completed .task-text {
     text-decoration: line-through;
     color: rgb(150, 150, 150);
+}
+
+#todoList li .task-due-date {
+    font-size: 0.8rem;
+    color: rgb(130, 110, 170);
+    white-space: nowrap;
 }
 
 #todoList li .delete-btn {
