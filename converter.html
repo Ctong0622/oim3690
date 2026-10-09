@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temperature Converter | Ctong0622</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, rgb(240, 244, 255), rgb(253, 242, 248));
+            color: rgb(45, 45, 45);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: rgb(75, 63, 114);
+            text-align: center;
+            border-bottom: 3px solid rgb(167, 139, 250);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .converter-card {
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 12px;
+            padding: 25px 30px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .converter-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        #celsiusInput {
+            flex: 1;
+            padding: 10px 14px;
+            font-size: 1rem;
+            border: 2px solid rgb(216, 200, 245);
+            border-radius: 8px;
+            background: white;
+        }
+
+        #celsiusInput:focus {
+            outline: none;
+            border-color: rgb(109, 40, 217);
+        }
+
+        #convertButton {
+            padding: 10px 18px;
+            font-size: 1rem;
+            background: rgb(109, 40, 217);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        #convertButton:hover {
+            background: rgb(87, 30, 173);
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Temperature Converter</h1>
+    </header>
+
+    <main>
+        <div class="converter-card">
+            <label for="celsiusInput">Celsius:</label>
+            <div class="converter-row">
+                <input type="number" id="celsiusInput" placeholder="Enter a temperature in Celsius" />
+                <button type="button" id="convertButton">Convert</button>
+            </div>
+            <p id="result"></p>
+        </div>
+    </main>
+
+    <script>
+        function toFahrenheit(celsius) {
+            return celsius * 9 / 5 + 32;
+        }
+
+        const celsiusInput = document.getElementById('celsiusInput');
+        const convertButton = document.getElementById('convertButton');
+        const result = document.getElementById('result');
+
+        convertButton.addEventListener('click', () => {
+            const celsius = Number(celsiusInput.value);
+            const fahrenheit = toFahrenheit(celsius);
+            result.textContent = `${celsius}°C is ${fahrenheit}°F`;
+        });
+    </script>
+</body>
+</html>
