@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "oim3690": {
+      "type": "http",
+      "url": "https://oim-mcp.zhili.dev/oim3690/mcp"
+    }
+  }
+}
