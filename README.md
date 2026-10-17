@@ -5,3 +5,7 @@ This is the repository for all my classwork.
 ## Mini Project 1
 
 [Zhuoyue Mobility](https://github.com/Ctong0622/zhuoyue-mobility)
+
+## Mini Project 2
+
+[Mini Project 2: Grade Goal Tracker](https://ctong0622.github.io/grade-goal-tracker/)
