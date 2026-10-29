@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch Something Fun - Weather</title>
+</head>
+
+<body>
+    <h1>Babson College Weather</h1>
+
+    <button id="weatherButton">Get Weather</button>
+    <p id="weatherResult"></p>
+
+    <h2>Make it Yours</h2>
+    <button id="surpriseButton">Surprise Me</button>
+    <p id="surpriseResult"></p>
+
+    <script>
+        async function getWeather() {
+            const weatherResult = document.getElementById("weatherResult");
+
+            try {
+                const response = await fetch(
+                    "https://api.open-meteo.com/v1/forecast?latitude=42.2987&longitude=-71.2622&current=temperature_2m"
+                );
+                const data = await response.json();
+
+                const temperature = data.current.temperature_2m;
+                weatherResult.textContent = `Current temperature at Babson College: ${temperature}°C`;
+            } catch (error) {
+                weatherResult.textContent = "Sorry, something went wrong fetching the weather.";
+                console.log(error);
+            }
+        }
+
+        const weatherButton = document.getElementById("weatherButton");
+        weatherButton.addEventListener("click", getWeather);
+
+        // "Surprise Me" switches between the Weather API and the Advice API
+        let showWeatherNext = true;
+
+        async function surpriseMe() {
+            const surpriseResult = document.getElementById("surpriseResult");
+
+            try {
+                if (showWeatherNext) {
+                    const response = await fetch(
+                        "https://api.open-meteo.com/v1/forecast?latitude=42.2987&longitude=-71.2622&current=temperature_2m"
+                    );
+                    const data = await response.json();
+
+                    const temperature = data.current.temperature_2m;
+                    surpriseResult.textContent = `Current temperature at Babson College: ${temperature}°C`;
+                } else {
+                    const response = await fetch("https://api.adviceslip.com/advice");
+                    const data = await response.json();
+
+                    const advice = data.slip.advice;
+                    surpriseResult.textContent = `Advice: ${advice}`;
+                }
+            } catch (error) {
+                surpriseResult.textContent = "Sorry, something went wrong fetching the surprise.";
+                console.log(error);
+            }
+
+            // Switch to the other API next time the button is clicked
+            showWeatherNext = !showWeatherNext;
+        }
+
+        const surpriseButton = document.getElementById("surpriseButton");
+        surpriseButton.addEventListener("click", surpriseMe);
+    </script>
+</body>
+</html>
