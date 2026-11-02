@@ -9,3 +9,8 @@ This is the repository for all my classwork.
 ## Mini Project 2
 
 [Mini Project 2: Grade Goal Tracker](https://ctong0622.github.io/grade-goal-tracker/)
+
+## Mini Project 3
+
+[Mini Project 3: Weather Outfit Planner](https://ctong0622.github.io/weather-outfit-planner/)
+
