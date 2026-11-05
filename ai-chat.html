@@ -4,34 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ask AI</title>
+  <!-- Turns the model's Markdown (lists, **bold**, `code`, etc.) into real
+       HTML so it displays formatted instead of as raw symbols. -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    #chat { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; min-height: 2rem; }
+    .msg { padding: 0.5rem 0.75rem; border-radius: 10px; max-width: 85%; }
+    .msg.user { align-self: flex-end; background: #dbeafe; }
+    .msg.assistant { align-self: flex-start; background: #f1f1f1; }
+    .msg .label { display: block; font-size: 0.75rem; opacity: 0.6; margin-bottom: 0.2rem; }
+    .msg .body :first-child { margin-top: 0; }
+    .msg .body :last-child { margin-bottom: 0; }
+    #controls { display: flex; gap: 0.5rem; }
+    #prompt { flex: 1; font: inherit; }
+  </style>
 </head>
 <body>
   <h1>Ask AI</h1>
   <div id="chat"></div>
-  <textarea id="prompt" placeholder="Ask AI anything..."></textarea>
-  <button id="askBtn">Ask</button>
+  <div id="controls">
+    <textarea id="prompt" placeholder="Ask AI anything..."></textarea>
+    <button id="askBtn">Ask</button>
+    <button id="newChatBtn" type="button">New Chat</button>
+  </div>
 
   <script>
     // This page works only on your vercel.app link. Live Server and GitHub Pages
     // cannot run the function in api/ask.js, so there the Ask button fails.
 
-    // Every question and answer so far, in order. The API itself remembers
-    // nothing between calls, so this array is the only place the browser
-    // keeps the conversation, and it is sent whole with each new question.
-    const history = [];
+    // The key the conversation is saved under in the browser's localStorage,
+    // so it survives a page refresh (unlike a plain JavaScript array, which
+    // would reset to empty every time the page reloads).
+    const STORAGE_KEY = 'oim3690-chat-history';
+
+    // Every question and answer so far, in order. Restored from localStorage
+    // on load, and saved back to localStorage after every message, so this
+    // is the only place the browser keeps the conversation between visits.
+    let history;
+    try {
+      history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch {
+      history = [];
+    }
+
+    function saveHistory() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
 
     const chatEl = document.querySelector('#chat');
 
-    // Adds one line to the on-screen chat log. New lines are appended after
-    // the old ones, so the newest message always ends up at the bottom.
-    function addMessage(label, text) {
-      const p = document.createElement('p');
-      // textContent shows the message as plain text. innerHTML would run any
-      // HTML the model wrote.
-      p.textContent = label + ': ' + text;
-      chatEl.appendChild(p);
-      return p;
+    // Adds one message bubble to the on-screen chat log. New bubbles are
+    // appended after the old ones, so the newest message always ends up at
+    // the bottom. The text is run through marked.parse so Markdown the model
+    // writes (lists, bold, code) renders as real HTML instead of raw symbols.
+    function addMessage(role, text) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'msg ' + role;
+      const label = document.createElement('span');
+      label.className = 'label';
+      label.textContent = role === 'user' ? 'You' : 'AI';
+      const body = document.createElement('div');
+      body.className = 'body';
+      // innerHTML here runs whatever HTML marked.parse produces from the
+      // model's Markdown, the same trust ChatGPT-style UIs give the model.
+      body.innerHTML = marked.parse(text);
+      wrapper.append(label, body);
+      chatEl.appendChild(wrapper);
+      return body;
     }
+
+    // Redraws every saved message. Used on page load to restore the
+    // conversation from localStorage so a refresh does not lose it.
+    function renderHistory() {
+      chatEl.innerHTML = '';
+      for (const message of history) {
+        addMessage(message.role, message.content);
+      }
+    }
+    renderHistory();
 
     // Sends the full conversation so far (not just the latest prompt) to your
     // own function at /api/ask. The function adds the key and calls the
@@ -54,32 +105,44 @@
 
     const askBtn = document.querySelector('#askBtn');
     const promptEl = document.querySelector('#prompt');
+    const newChatBtn = document.querySelector('#newChatBtn');
+
     askBtn.addEventListener('click', async () => {
       const prompt = promptEl.value;
       if (!prompt.trim()) return;
       // Turn the button off until the answer arrives, so a second click
       // cannot send, and pay for, a second request.
       askBtn.disabled = true;
-      addMessage('You', prompt);
+      addMessage('user', prompt);
       promptEl.value = '';
-      // Add the new question to the history, then send the whole history
-      // (every earlier question and answer plus this one), so the model can
-      // see the full conversation instead of just the latest line.
+      // Add the new question to the history, save it, then send the whole
+      // history (every earlier question and answer plus this one), so the
+      // model can see the full conversation instead of just the latest line.
       history.push({ role: 'user', content: prompt });
+      saveHistory();
       // A call takes a few seconds, so show something while you wait.
-      const thinkingEl = addMessage('AI', 'Thinking...');
+      const thinkingEl = addMessage('assistant', 'Thinking...');
       try {
         const answer = await askAI(history);
-        thinkingEl.textContent = 'AI: ' + answer;
-        // Keep the reply in the history too, so later questions can refer
-        // back to it.
+        thinkingEl.innerHTML = marked.parse(answer);
+        // Keep the reply in the history too, and save again, so later
+        // questions (and the next page refresh) can refer back to it.
         history.push({ role: 'assistant', content: answer });
+        saveHistory();
       } catch (error) {
         thinkingEl.textContent = 'Error: ' + error.message;
       } finally {
         // finally runs whether the call worked or failed.
         askBtn.disabled = false;
       }
+    });
+
+    // Starts a fresh conversation: empties the history array, removes the
+    // saved copy from localStorage, and clears the on-screen chat log.
+    newChatBtn.addEventListener('click', () => {
+      history = [];
+      localStorage.removeItem(STORAGE_KEY);
+      chatEl.innerHTML = '';
     });
   </script>
 </body>
