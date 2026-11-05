@@ -7,21 +7,40 @@
 </head>
 <body>
   <h1>Ask AI</h1>
+  <div id="chat"></div>
   <textarea id="prompt" placeholder="Ask AI anything..."></textarea>
   <button id="askBtn">Ask</button>
-  <p id="answer"></p>
 
   <script>
     // This page works only on your vercel.app link. Live Server and GitHub Pages
     // cannot run the function in api/ask.js, so there the Ask button fails.
 
-    // Sends your prompt to your own function at /api/ask. The function adds the
-    // key and calls the model, so no key appears anywhere on this page.
-    async function askAI(prompt) {
+    // Every question and answer so far, in order. The API itself remembers
+    // nothing between calls, so this array is the only place the browser
+    // keeps the conversation, and it is sent whole with each new question.
+    const history = [];
+
+    const chatEl = document.querySelector('#chat');
+
+    // Adds one line to the on-screen chat log. New lines are appended after
+    // the old ones, so the newest message always ends up at the bottom.
+    function addMessage(label, text) {
+      const p = document.createElement('p');
+      // textContent shows the message as plain text. innerHTML would run any
+      // HTML the model wrote.
+      p.textContent = label + ': ' + text;
+      chatEl.appendChild(p);
+      return p;
+    }
+
+    // Sends the full conversation so far (not just the latest prompt) to your
+    // own function at /api/ask. The function adds the key and calls the
+    // model, so no key appears anywhere on this page.
+    async function askAI(messages) {
       const response = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ messages })
       });
       if (!response.ok) {
         throw new Error(`Request failed: ${response.status}`);
@@ -34,20 +53,29 @@
     }
 
     const askBtn = document.querySelector('#askBtn');
+    const promptEl = document.querySelector('#prompt');
     askBtn.addEventListener('click', async () => {
-      const prompt = document.querySelector('#prompt').value;
-      const answerEl = document.querySelector('#answer');
+      const prompt = promptEl.value;
+      if (!prompt.trim()) return;
       // Turn the button off until the answer arrives, so a second click
       // cannot send, and pay for, a second request.
       askBtn.disabled = true;
+      addMessage('You', prompt);
+      promptEl.value = '';
+      // Add the new question to the history, then send the whole history
+      // (every earlier question and answer plus this one), so the model can
+      // see the full conversation instead of just the latest line.
+      history.push({ role: 'user', content: prompt });
       // A call takes a few seconds, so show something while you wait.
-      answerEl.textContent = 'Thinking...';
+      const thinkingEl = addMessage('AI', 'Thinking...');
       try {
-        // textContent shows the answer as plain text. innerHTML would run any
-        // HTML the model wrote.
-        answerEl.textContent = await askAI(prompt);
+        const answer = await askAI(history);
+        thinkingEl.textContent = 'AI: ' + answer;
+        // Keep the reply in the history too, so later questions can refer
+        // back to it.
+        history.push({ role: 'assistant', content: answer });
       } catch (error) {
-        answerEl.textContent = 'Error: ' + error.message;
+        thinkingEl.textContent = 'Error: ' + error.message;
       } finally {
         // finally runs whether the call worked or failed.
         askBtn.disabled = false;

@@ -4,8 +4,11 @@
 
 export default {
   async fetch(request) {
-    // The prompt your page sent in the request body.
-    const { prompt } = await request.json();
+    // The whole conversation your page sent in the request body: every
+    // earlier question and answer, plus the newest question. The model
+    // itself remembers nothing between calls, so the function needs the
+    // full history again every time, not just the latest message.
+    const { messages } = await request.json();
 
     const response = await fetch("https://openrouter.ai/api/v1/responses", {
       method: "POST",
@@ -26,7 +29,10 @@ export default {
         // Standing rules a visitor cannot change, unlike input below.
         instructions: "You are a recipe assistant. "
           + "Always answer in exactly three short bullet points.",
-        input: prompt
+        // The Responses API accepts input as a list of { role, content }
+        // messages, so the full history your page sent becomes the input
+        // as is, in order.
+        input: messages
       })
     });
 
