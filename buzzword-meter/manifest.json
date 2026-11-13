@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Buzzword Meter",
+  "description": "Highlights buzzwords on job postings at jobs.lever.co and shows a count for each.",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["https://jobs.lever.co/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+}

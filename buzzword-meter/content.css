@@ -1,0 +1,30 @@
+#buzzword-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #1f2937;
+  color: white;
+  font: 600 14px system-ui, sans-serif;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+#buzzword-banner-total {
+  font-size: 16px;
+}
+
+#buzzword-banner-breakdown {
+  margin-top: 4px;
+  font-weight: 400;
+  font-size: 12px;
+  color: #d1d5db;
+}
+
+.buzzword-highlight {
+  background: #fde047;
+  color: #1f2937;
+  border-radius: 2px;
+  padding: 0 2px;
+}
