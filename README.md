@@ -21,3 +21,10 @@ https://oim3690-qea0hr6rf-ctong0622.vercel.app/ai-chat.html
 [Try my AI Chat](https://oim3690-sooty.vercel.app/ai-chat.html)
 (not sure which one it is, but i put both)
 
+## Mini Project 4
+
+[Canvas Deadline Helper - GitHub Repository](https://github.com/Ctong0622/canvas-deadline-helper)
+
+[Canvas Deadline Helper - Live Website](https://ctong0622.github.io/canvas-deadline-helper/)
+
+A Chrome extension that highlights upcoming Canvas assignment deadlines and helps students stay organized.
